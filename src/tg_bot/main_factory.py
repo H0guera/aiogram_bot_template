@@ -46,10 +46,11 @@ class DpProvider(Provider):
     def create_dispatcher(
         self,
         dishka: AsyncContainer,
+        message_manager: MessageManagerProtocol,
     ) -> Dispatcher:
         dp = Dispatcher()
         setup_dishka(container=dishka, router=dp)
-        setup_handlers(dp)
+        setup_handlers(dp, message_manager)
         logger.info("Configured bot routers \n%s", print_router_tree(dp))
 
         return dp
