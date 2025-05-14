@@ -27,6 +27,7 @@ def get_bot_providers(path_env: str) -> list[Provider]:
 def get_bot_specific_providers() -> list[Provider]:
     return [
         DpProvider(),
+        DialogManagerProvider(),
     ]
 
 
