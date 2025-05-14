@@ -29,6 +29,9 @@ src = ["src"]
 select = ["ALL"]
 ignore = [
     "A003",
+    "ANN003",
+    "ANN201",
+    "ARG001",
     "ARG005",
     "C408",
     "C417",
