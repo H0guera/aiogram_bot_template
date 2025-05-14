@@ -1,6 +1,8 @@
 import logging
 
 from aiogram import Dispatcher
+from aiogram_dialog.api.protocols import MessageManagerProtocol
+from aiogram_dialog.manager.message_manager import MessageManager
 from dishka import AsyncContainer, Provider, Scope, make_async_container, provide
 from dishka.integrations.aiogram import setup_dishka
 
@@ -25,7 +27,16 @@ def get_bot_providers(path_env: str) -> list[Provider]:
 def get_bot_specific_providers() -> list[Provider]:
     return [
         DpProvider(),
+        DialogManagerProvider(),
     ]
+
+
+class DialogManagerProvider(Provider):
+    scope = Scope.APP
+
+    @provide
+    def get_manager(self) -> MessageManagerProtocol:
+        return MessageManager()
 
 
 class DpProvider(Provider):
@@ -35,10 +46,11 @@ class DpProvider(Provider):
     def create_dispatcher(
         self,
         dishka: AsyncContainer,
+        message_manager: MessageManagerProtocol,
     ) -> Dispatcher:
         dp = Dispatcher()
         setup_dishka(container=dishka, router=dp)
-        setup_handlers(dp)
+        setup_handlers(dp, message_manager)
         logger.info("Configured bot routers \n%s", print_router_tree(dp))
 
         return dp
