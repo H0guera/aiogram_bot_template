@@ -1,0 +1,24 @@
+bot:
+  token: ""
+  log-chat: -1001234567890
+  superusers:
+    - 666
+db:
+  type: postgresql
+  connector: asyncpg
+  host: localhost
+  port: 5432
+  login: postgres
+  password: postgres
+  name: db_name
+redis:
+  url: localhost
+  port: 6379
+  db: 2
+storage:
+  type: memory
+  # type: redis
+  # redis:
+  #   url: localhost
+  #   port: 6379
+  #   db: 1

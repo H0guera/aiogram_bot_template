@@ -1,17 +1,26 @@
-install-dev-deps: dev-deps
-	pip-sync requirements.txt dev-requirements.txt
+install-dev-deps:
+	uv sync --locked
 
-install-deps: deps
-	pip-sync requirements.txt
+install-deps:
+	uv sync --locked --no-dev
 
-deps: pre-install
-	pip-compile --resolver=backtracking --output-file=requirements.txt pyproject.toml
+fmt:
+	uv run ruff check src --fix --unsafe-fixes
+	uv run ruff format src
+	uv run toml-sort pyproject.toml
 
-dev-deps: deps
-	pip-compile --resolver=backtracking --extra=dev --output-file=dev-requirements.txt pyproject.toml
+lint:
+	uv run ruff check src
+	uv run ruff format --check src
+	uv run mypy src
+	uv run toml-sort --check pyproject.toml
 
-pre-install: upgrade-pip
-	pip install pip-tools
-
-upgrade-pip:
-	pip install --upgrade pip
+help:
+	@echo "Makefile for Aiogram tg bot template"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make install-dev-deps   Install development dependencies"
+	@echo "  make install-deps       Install production dependencies"
+	@echo "  make fmt                Format code"
+	@echo "  make lint               Lint code"
+	@echo "  make help               Show this help message"
